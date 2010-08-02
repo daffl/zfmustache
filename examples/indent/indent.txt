@@ -1,0 +1,6 @@
+SELECT
+  Id,
+  Name,
+  Superpower,
+FROM
+  Users
