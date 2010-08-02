@@ -205,7 +205,9 @@ class Mustache {
 	protected function _renderSection($template) {
 		$otag  = preg_quote($this->_otag, '/');
 		$ctag  = preg_quote($this->_ctag, '/');
-		$regex = '/' . $otag . '(\\^|\\#)\\s*(.+?)\\s*' . $ctag . '\\s*([\\s\\S]+?)' . $otag . '\\/\\s*\\2\\s*' . $ctag . '\\s*/m';
+		$regex = '/' . $otag . '(\\^|\\#)\\s*(.+?)\\s*' . $ctag . '\\n*([\\s\\S]+?)' . $otag . '\\/\\s*\\2\\s*' . $ctag . '\\s*/m';
+//							   '(\\^|\\#)\\s*(.+)\\s*' . $ctag .  '\n*([\\s\\S]+?)' .  $otag . '\\/\\s*\\2\\s*' . $ctag . '\\s*'
+
 
 		$matches = array();
 		while (preg_match($regex, $template, $matches, PREG_OFFSET_CAPTURE)) {
