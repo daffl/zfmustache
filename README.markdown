@@ -1,93 +1,72 @@
-Mustache.php
+ZFMustache
 ============
 
-A [Mustache](http://defunkt.github.com/mustache/) implementation in PHP.
+[Mustache](http://defunkt.github.com/mustache/) views for the [Zend Framework](http://framework.zend.com/)
+using the [mustache.php](https://github.com/bobthecow/mustache.php) implementation.
 
-
-Usage
+Installation
 -----
 
-A quick example:
+You can clone the GIT repository directly in your library folder:
 
-    <?php
-    include('Mustache.php');
-    $m = new Mustache;
-    echo $m->render('Hello {{planet}}', array('planet' => 'World!'));
-    // "Hello World!"
-    ?>
+> cd myapp 
+> git clone git@github.com:daffl/zfmustache.git library/Mustache
 
+Or add it as a GIT submodule to your existing repository: 
 
-And a more in-depth example--this is the canonical Mustache template:
+> git submodule add git@github.com:daffl/zfmustache.git library/Mustache
 
-    Hello {{name}}
-    You have just won ${{value}}!
-    {{#in_ca}}
-    Well, ${{taxed_value}}, after taxes.
-    {{/in_ca}}
+> git submodule init
 
 
-Along with the associated Mustache class:
+Use it
+-----
 
-    <?php
-    class Chris extends Mustache {
-        public $name = "Chris";
-        public $value = 10000;
-    
-        public function taxed_value() {
-            return $this->value - ($this->value * 0.4);
-        }
-    
-        public $in_ca = true;
-    }
+The application resource will instantiate the view, set the Mustache engine autoloader
+and update the view renderer (unless enabled is set to false).
+Add the following lines to your *application.ini* to enable mustache views:
 
+	pluginpaths.Mustache_Application_Resource = "Mustache/Application/Resource"
+	resources.mustache.basePath = APPLICATION_PATH "/views/scripts" 
 
-Render it like so:
+You can also use mustache views only in specific controllers or actions. For example
+(using *APPLICATION_PATH/views/scripts/controllername/actionname.mustache* as the template):
 
-    <?php
-    $c = new Chris;
-    echo $chris->render($template);
-    ?>
+	pluginpaths.Mustache_Application_Resource = "Mustache/Application/Resource"
+	resources.mustache.basePath = APPLICATION_PATH "/views/scripts"
+	resources.mustache.enabled = false
 
+The following can be used in any controller:
 
-Here's the same thing, a different way:
+	<?php
+		class IndexController extends Zend_Controller_Action
+		{
+			public function init()
+			{
+		    	$bootstrap = $this->getInvokeArg('bootstrap');
+				$this->view = $bootstrap->getResource('mustache');
+				$viewRenderer = $this->_helper->getHelper('viewRenderer');
+				$viewRenderer->setView($this->view)->setViewSuffix('mustache');
+			}
 
-Create a view object--which could also be an associative array, but those don't do functions quite as well:
+			public function indexAction()
+			{
+				$this->view->planet = "Mars";
+			}
+		}
 
-    <?php
-    class Chris {
-        public $name = "Chris";
-        public $value = 10000;
-    
-        public function taxed_value() {
-            return $this->value - ($this->value * 0.4);
-        }
-    
-        public $in_ca = true;
-    }
-    ?>
+A mustache file
+-----
 
+Create a file called *APPLICATION_PATH/views/index/scripts/index.mustache* e.g. like this:
 
-And render it:
-
-    <?php
-    $chris = new Chris;
-    $m = new Mustache;
-    echo $m->render($template, $chris);
-    ?>
-
-
-
-
-Known Issues
-------------
-
- * Sections don't respect delimiter changes -- `delimiters` example currently fails with an
-   "unclosed section" exception.
- * Mustache isn't always very good at whitespace.
-
-
-See Also
---------
-
- * [Readme for the Ruby Mustache implementation](http://github.com/defunkt/mustache/blob/master/README.md).
- * [mustache(1)](http://defunkt.github.com/mustache/mustache.1.html) and [mustache(5)](http://defunkt.github.com/mustache/mustache.5.html) man pages.
+	<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+	<html>
+		<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+			<title>Mustache Test</title>
+		</head>
+		<body>
+			<h2>Hello {{planet}}!</h2>
+		</body>
+	</html>
