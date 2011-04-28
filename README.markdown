@@ -10,11 +10,12 @@ Installation
 You can clone the GIT repository directly in your library folder:
 
 > cd myapp 
-> git clone git@github.com:daffl/zfmustache.git library/Mustache
+
+> git clone git@github.com:daffl/zfmustache.git -b zfmustache library/Mustache
 
 Or add it as a GIT submodule to your existing repository: 
 
-> git submodule add git@github.com:daffl/zfmustache.git library/Mustache
+> git submodule add git@github.com:daffl/zfmustache.git -b zfmustache library/Mustache
 
 > git submodule init
 
