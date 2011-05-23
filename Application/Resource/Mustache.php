@@ -27,6 +27,7 @@ class Mustache_Application_Resource_Mustache extends Zend_Application_Resource_R
     	if($enabled) {
 	        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
     	    $viewRenderer->setView($view)->setViewSuffix($suffix);
+    	    Zend_Layout::getMvcInstance()->setViewSuffix($suffix);
     	}
     	return $view;
     }
